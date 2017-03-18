@@ -1,0 +1,7 @@
+com/baturu/kit/App.class
+com/baturu/kit/configuration/AopConfig.class
+com/baturu/kit/aop/annotation/Action.class
+com/baturu/kit/aop/Main.class
+com/baturu/kit/aop/service/DemoMethodService.class
+com/baturu/kit/aop/service/DemoAnnotationService.class
+com/baturu/kit/aop/LogAspect.class

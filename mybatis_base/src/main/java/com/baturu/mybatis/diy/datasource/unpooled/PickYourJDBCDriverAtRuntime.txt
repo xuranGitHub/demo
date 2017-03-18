@@ -1,0 +1,56 @@
+Pick your JDBC driver at runtime
+
+If you're going to do any sort of database activity in Java, you'll probably be using JDBC. Like ODBC before it, JDBC is a great way to insure that your program is free of any ties to the underlying database. Traditionally, the mechanism is that you put the JDBC driver somewhere in the classpath and then use class.forName() to find and load the driver.
+One problem with this is that it presumes that your driver is in the classpath. This means either packaging the driver in your jar, or having to stick the driver somewhere (probably unpacking it too), or modifying your classpath.
+
+"But why not use something like URLClassLoader and the overload of class.forName() that lets you specify the ClassLoader?" Because the DriverManager will refuse to use a driver not loaded by the system ClassLoader. Ouch!
+
+The workaround for this is to create a shim class that implements java.sql.Driver. This shim class will do nothing but call the methods of an instance of a JDBC driver that we loaded dynamically. Something like this:
+
+import java.sql.*;
+
+class DriverShim implements Driver {
+	private Driver driver;
+	DriverShim(Driver d) {
+		this.driver = d;
+	}
+	public boolean acceptsURL(String u) throws SQLException {
+		return this.driver.acceptsURL(u);
+	}
+	public Connection connect(String u, Properties p) throws SQLException {
+		return this.driver.connect(u, p);
+	}
+	public int getMajorVersion() {
+		return this.driver.getMajorVersion();
+	}
+	public int getMinorVersion() {
+		return this.driver.getMinorVersion();
+	}
+	public DriverPropertyInfo[] getPropertyInfo(String u, Properties p) throws SQLException {
+		return this.driver.getPropertyInfo(u, p);
+	}
+	public boolean jdbcCompliant() {
+		return this.driver.jdbcCompliant();
+	}
+}
+
+class test {
+	public will_not_work() {
+		URL u = new URL("jar:file:/path/to/pgjdbc2.jar!/");
+		String classname = "org.postgresql.Driver";
+		URLClassLoader ucl = new URLClassLoader(new URL[] { u });
+		Class.forName(classname, true, ucl);
+		DriverManager.getConnection("jdbc:postgresql://host/db", "user", "pw");
+		// That will throw SQLException: No suitable driver
+	}
+	public will_work() {
+		URL u = new URL("jar:file:/path/to/pgjdbc2.jar!/");
+		String classname = "org.postgresql.Driver";
+		URLClassLoader ucl = new URLClassLoader(new URL[] { u });
+		Driver d = (Driver)Class.forName(classname, true, ucl).newInstance();
+		DriverManager.registerDriver(new DriverShim(d));
+		DriverManager.getConnection("jdbc:postgresql://host/db", "user", "pw");
+		// Success!
+	}
+}
+will_work() works because DriverShim was loaded by the system class loader, and the DriverManager doesn't care that it invokes a class that wasn't. We must perform the registration on the instance ourselves, because although Class.forName() will cause a registration to take place, that particular registration will fail for the same reason that will_not_work() fails.

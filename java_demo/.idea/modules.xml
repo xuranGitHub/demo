@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/codeDemo.iml" filepath="$PROJECT_DIR$/codeDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xuran.codeDemo.iml" filepath="$PROJECT_DIR$/xuran.codeDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xuran.javaDemo.iml" filepath="$PROJECT_DIR$/xuran.javaDemo.iml" />
+    </modules>
+  </component>
+</project>
