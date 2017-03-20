@@ -1,1 +1,0 @@
-0:0:0:0:0:0:0:1 - - [19/Dec/2016:01:17:07 +0800] "POST /servlet_demo/submitBeer.do HTTP/1.1" 500 2455 http-bio-8080-exec-1 922
