@@ -37,12 +37,12 @@ public class Chapter2 {
         /*2*/
         Predicate<Book> computingAndMedicine = computingFilter.and(
                 b -> b.getTopic() == MEDICINE);
-        computingAndMedicine.test(library.get(0));
+        boolean test = computingAndMedicine.test(library.get(0));
 
         /*3*/
         Predicate<Book> computingOrMedicine = computingFilter.or(
                 b -> b.getTopic() == MEDICINE);
-        computingOrMedicine.test(library.get(0));
+        boolean test1 = computingOrMedicine.test(library.get(0));
 
         /*4*/
         System.out.println(computingAndMedicine.equals(computingOrMedicine));

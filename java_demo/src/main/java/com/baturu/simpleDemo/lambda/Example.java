@@ -77,8 +77,8 @@ public class Example {
         // We can even combine Predicate using and(), or() And xor() logical functions
         // for example to find names, which starts with J and four letters long, you
         // can pass combination of two Predicate
-        Predicate<String> startsWithJ = (n) -> n.startsWith("J");
-        Predicate<String> fourLetterLong = (n) -> n.length() == 4;
+        Predicate<String> startsWithJ = n -> n.startsWith("J");
+        Predicate<String> fourLetterLong = n -> n.length() == 4;
 
         List<String> names = Arrays.asList("Java", "Scala", "C++", "Haskell", "Lisp");
         names.stream().filter(startsWithJ.and(fourLetterLong))
